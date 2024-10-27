@@ -1,0 +1,20 @@
+name: trotro
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - black
+  - pytest
+  - pytest-cov
+  - pandas
+  - numpy
+  - scikit-learn
+  - scipy
+  - matplotlib
+  - seaborn
+  - ipython
+  - pyarrow
+  - xgboost
+  - pip:
+    - pickle5
