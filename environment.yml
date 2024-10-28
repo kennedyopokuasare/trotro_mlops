@@ -16,5 +16,7 @@ dependencies:
   - ipython
   - pyarrow
   - xgboost
+  - mlflow
+  - hyperopt
   - pip:
     - pickle5
