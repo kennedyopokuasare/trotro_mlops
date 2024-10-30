@@ -10,7 +10,7 @@ Downloaded from New York City tax and limousine Commision. We use the [January 2
 
 
 
-# Training the model
+# Modeling
 
 Comparing the prediction of an xgboot regressor on a training and validation set
 
