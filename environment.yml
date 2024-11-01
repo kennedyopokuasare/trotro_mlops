@@ -20,3 +20,8 @@ dependencies:
   - hyperopt
   - pip:
     - pickle5
+    - azure-ai-ml
+    - azure-mlflow
+    - pylint
+    - pytest
+    - isort
