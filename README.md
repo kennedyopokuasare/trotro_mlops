@@ -16,7 +16,7 @@ Comparing the prediction of an xgboot regressor on a training and validation set
 
 | Training dataset prediction | Validation dataset prediction |
 |----------|----------|
-| ![Training set prediction](./img/train_dist.png)  | ![Training set prediction](./img/val_dist.png) |
+| ![Training set prediction](./modeling/img/train_dist.png)  | ![Training set prediction](./modeling/img/val_dist.png) |
 
 # Experiment tracking with MlFlow
 
