@@ -10,7 +10,7 @@ def read_and_clean_data(file_path: str) -> pd.DataFrame:
     """Reads the data from the given file path and cleans it by filtering out invalid entries."""
     df = pd.read_parquet(file_path)
     df = df[df.passenger_count > 0]
-    return df.to_frame()
+    return pd.DataFrame(df)
 
 
 def clean_data(

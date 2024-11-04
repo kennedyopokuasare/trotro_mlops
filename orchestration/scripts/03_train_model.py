@@ -59,7 +59,7 @@ def hyperparameter_tuning(
             )
             y_pred = xgb_model.predict(val_matrix)
             rmse = root_mean_squared_error(y_val, y_pred)
-            mlflow.log_metric("rmse", rmse)
+            mlflow.log_metric("rmse", float(rmse))
             return {"loss": rmse, "status": STATUS_OK}
 
     search_space = {
@@ -184,7 +184,7 @@ def main():
         best_parameters=best_parameters,
     )
 
-    mlflow.log_metric("rmse", rmse_val)
+    mlflow.log_metric("rmse", float(rmse_val))
 
     fig_train = plot_pred_distribution(
         y=df_train[target],
