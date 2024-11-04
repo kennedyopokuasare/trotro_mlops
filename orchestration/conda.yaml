@@ -1,0 +1,20 @@
+name: trotro
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - ipython
+  - pyarrow
+  - xgboost
+  - mlflow
+  - hyperopt
+  - pip:
+    - pickle5
+    - azure-ai-ml
+    - azure-mlflow

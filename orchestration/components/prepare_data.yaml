@@ -1,0 +1,28 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: prepare_data
+version: 1
+display_name: Prepare data for training
+type: command
+inputs:
+  train_data_path:
+    type: uri_file
+  validation_data_path:
+    type: uri_file
+outputs:
+  features_train_path:
+    type: uri_folder
+    mode: rw_mount
+  features_validation_path:
+    type: uri_folder
+    mode: rw_mount
+code: ../scripts
+environment:
+  conda_file: ../conda.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest
+  name: trotro
+  version: 1
+command: >-
+  python 02_prepare_data.py 
+  --train_data_path ${{inputs.train_data_path}} 
+  --validation_data_path ${{inputs.validation_data_path}}
+

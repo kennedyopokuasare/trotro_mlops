@@ -1,9 +1,10 @@
+import os
 from typing import List, Tuple
 
 import mlflow
 import pandas as pd
 
-from .utils import main_args_parser
+from orchestration.scripts.utils import main_args_parser
 
 
 def read_and_clean_data(file_path: str) -> pd.DataFrame:
@@ -92,7 +93,7 @@ def parse_args():
 
 def main():
 
-    with mlflow.start_run():
+    with mlflow.start_run() as run:
         args = parse_args()
         print("prepare data...")
         print(" ".join(f"{k}={v}\n" for k, v in vars(args).items()))
@@ -107,8 +108,15 @@ def main():
             df_train, df_val, args.categorical_features, args.numerical_features
         )
 
-        df_train.to_csv(args.features_train_path, index=False)
-        df_val.to_csv(args.features_validation_path, index=False)
+        ## args.features_train_path and args.features_validation_path are mounted as folders
+        train_features_file = os.path.join(args.features_train_path, "train_data.csv")
+        validate_features_file = os.path.join(
+            args.features_validation_path, "validate_data.csv"
+        )
+        df_train.to_csv(train_features_file, index=False)
+        df_val.to_csv(validate_features_file, index=False)
+
+        print(f"Completed prepare data pipeline with mlflow run id {run.info.run_id}")
 
 
 if __name__ == "__main__":

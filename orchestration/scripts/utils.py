@@ -2,26 +2,9 @@ import argparse
 from typing import List
 
 import matplotlib.pyplot as plt
-import pandas as pd
 import seaborn as sns
-from sklearn.feature_extraction import DictVectorizer
-
-
-def feature_encoding(
-    df_train: pd.DataFrame, df_val: pd.DataFrame, save_vectorizer: bool
-):
-    """Encodes the features in the given files."""
-    print("Feature encoding...")
-
-    dv = DictVectorizer(sparse=False)
-    x_train = dv.fit_transform(df_train.to_dict(orient="records"))
-
-    x_val = dv.transform(df_val.to_dict(orient="records"))
-
-    if save_vectorizer:
-        pass
-
-    return x_train, x_val
+from azure.ai.ml.constants import AssetTypes
+from azure.ai.ml.entities import Data
 
 
 def plot_pred_distribution(y, y_pred, y_label, y_pred_label, x_label, title):
@@ -31,11 +14,11 @@ def plot_pred_distribution(y, y_pred, y_label, y_pred_label, x_label, title):
     plt.xlabel(x_label)
     plt.title(title)
     plt.legend()
-    plt.show()
+    #plt.show()
     return fig
 
 
-def main_args_parser(categorical_features, numerical_features):
+def main_args_parser(default_categorical_features, default_numerical_features):
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--train_data_path", type=str, help="Path to the training data")
@@ -48,14 +31,55 @@ def main_args_parser(categorical_features, numerical_features):
     parser.add_argument(
         "--categorical_features",
         type=List[str],
-        default=categorical_features,
+        default=default_categorical_features,
         help="List of categorical features",
     )
     parser.add_argument(
         "--numerical_features",
         type=List[str],
-        default=numerical_features,
+        default=default_numerical_features,
         help="List of numerical features",
     )
 
     return parser
+
+
+def register_data(ml_client):
+    """Registers training, validation, and test data with the given ML client."""
+
+    train_data = Data(
+        name="trotro_train_data",
+        path="../data/yellow_tripdata_2024-01.parquet",
+        type=AssetTypes.URI_FILE,
+        description="Training data for the Trotro duration prediction model",
+        tags={"source_type": "file", "source": "Local file"},
+        version="1.0.0",
+    )
+
+    validation_data = Data(
+        name="trotro_validation_data",
+        path="../data/yellow_tripdata_2024-02.parquet",
+        type=AssetTypes.URI_FILE,
+        description="Validation data for the Trotro duration prediction model",
+        tags={"source_type": "file", "source": "Local file"},
+        version="1.0.0",
+    )
+
+    test_data = Data(
+        name="trotro_test_data",
+        path="../data/yellow_tripdata_2024-03.parquet",
+        type=AssetTypes.URI_FILE,
+        description="Test data for the Trotro duration prediction model",
+        tags={"source_type": "file", "source": "Local file"},
+        version="1.0.0",
+    )
+
+    try:
+        ml_client.data.create_or_update(train_data)
+        ml_client.data.create_or_update(validation_data)
+        ml_client.data.create_or_update(test_data)
+
+    except OSError as e:
+        print(f"Error registering data: {e}")
+
+    return train_data, validation_data, test_data

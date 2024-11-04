@@ -1,0 +1,27 @@
+$schema https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: train_model
+version: 1
+display_name: Train model to predict ride duration
+type: command
+inputs:
+  train_data_path:
+    type: uri_folder
+    mode: ro_mount
+  validation_data_path:
+    type: uri_folder
+    mode: ro_mount
+  # default numerical featues in script
+  # defualt categorical features in script
+  # default target feature in script
+environment:
+  conda_file: ../conda.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest
+  name: trotro
+  version: 1
+
+code: ../scripts
+
+command: >-
+  python 03_train_model.py 
+  --train_data_path ${{inputs.train_data_path}} 
+  --validation_data_path ${{inputs.validation_data_path}}
