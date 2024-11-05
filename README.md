@@ -1,3 +1,5 @@
+[![Install, build and test code](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml/badge.svg)](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml)
+
 # Trotro MLops
 
 

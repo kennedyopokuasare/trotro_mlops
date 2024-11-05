@@ -1,4 +1,4 @@
-name: Install and Build code
+name: Install, build and test code
 
 on: [push]
 
@@ -18,5 +18,8 @@ jobs:
         run: |
           make install
 
+      - name: Code formatting and linting
+        run: |
+          make test lint
       
 

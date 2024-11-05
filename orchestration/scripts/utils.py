@@ -14,7 +14,7 @@ def plot_pred_distribution(y, y_pred, y_label, y_pred_label, x_label, title):
     plt.xlabel(x_label)
     plt.title(title)
     plt.legend()
-    #plt.show()
+    # plt.show()
     return fig
 
 

@@ -2,8 +2,9 @@ import os
 
 from azure.ai.ml import Input, MLClient, dsl, load_component
 from azure.identity import DefaultAzureCredential
-from scripts.utils import register_data
-import webbrowser
+
+from orchestration.scripts.utils import register_data
+
 
 @dsl.pipeline(compute="serverless", description="Trotro duration prediction")
 def trotro_pipeline(train_input, validate_input):
@@ -52,5 +53,5 @@ def prepare_pipeline_job():
 
 if __name__ == "__main__":
 
-   pipeline_job = prepare_pipeline_job()
-   print(f"Job started at {pipeline_job.studio_url} ")
+    pipeline_job = prepare_pipeline_job()
+    print(f"Job started at {pipeline_job.studio_url} ")

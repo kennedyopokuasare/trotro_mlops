@@ -198,7 +198,6 @@ def main():
         print(f"Completed train pipeline with mlflow run id {run.info.run_id}")
 
 
-
 if __name__ == "__main__":
 
     main()
