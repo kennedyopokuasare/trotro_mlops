@@ -1,4 +1,5 @@
 import os
+from pdb import run
 
 import mlflow
 import pandas as pd
@@ -11,11 +12,12 @@ from sklearn.pipeline import make_pipeline
 from xgboost import XGBRegressor
 
 from orchestration.scripts.utils import main_args_parser, plot_pred_distribution
+from orchestration.scripts.prepare_data import compute_features
 
 
 def hyperparameter_tuning(
-    df_train,
-    df_val,
+    train_data,
+    validate_data,
     categorical_features,
     numerical_features,
     target_feature,
@@ -26,8 +28,8 @@ def hyperparameter_tuning(
     Perform hyperparameter tuning for an XGBoost model using the Hyperopt library.
 
     Parameters:
-    - df_train: DataFrame for training data.
-    - df_val: DataFrame for validation data.
+    - train_data: DataFrame for training data.
+    - validate_data: DataFrame for validation data.
     - categorical_features: List of categorical feature names.
     - numerical_features: List of numerical feature names.
     - target_feature: Name of the target feature.
@@ -38,15 +40,15 @@ def hyperparameter_tuning(
 
     print("preprocessing data...")
 
-    df_train = df_train[categorical_features + numerical_features]
-    df_val = df_val[categorical_features + numerical_features]
+    df_train = train_data[categorical_features + numerical_features]
+    df_val = validate_data[categorical_features + numerical_features]
 
     dv = DictVectorizer(sparse=False)
     x_train = dv.fit_transform(df_train.to_dict(orient="records"))
     x_val = dv.transform(df_val.to_dict(orient="records"))  # type: ignore
 
-    y_train = df_train[target_feature]
-    y_val = df_val[target_feature]
+    y_train = train_data[target_feature]
+    y_val = validate_data[target_feature]
 
     train_matrix = xgb.DMatrix(x_train, label=y_train)
     val_matrix = xgb.DMatrix(x_val, label=y_val)
@@ -98,6 +100,16 @@ def train_model(
     target_feature,
     best_parameters,
 ):
+    """
+    Train an XGBoost model using the provided training data and optimized hyperparameters.
+
+    Parameters:
+    - df_train_full: DataFrame containing the full training data.
+    - categorical_features: List of categorical feature names.
+    - numerical_features: List of numerical feature names.
+    - target_feature: Name of the target feature.
+    - best_parameters: Dictionary of best hyperparameters for the model.
+    """
     print(f"training model with optimized hyperparameters {best_parameters}")
 
     x_train = df_train_full[categorical_features + numerical_features].to_dict(
@@ -117,6 +129,30 @@ def train_model(
     return rmse, y_pred
 
 
+def score_model(run_id, data, features, target):
+    """
+    Score the model using the provided data and features.
+
+    Parameters:
+    - run_id: The ID of the MLflow run.
+    - data: DataFrame containing the data for scoring.
+    - features: List of feature names to be used for predictions.
+    - target: Name of the target feature for evaluation.
+    """
+
+    print(f"Scoring model saved for run Id: {run_id}")
+    model_uri = f"runs:/{run_id}/model"
+
+    model = mlflow.pyfunc.load_model(model_uri)
+
+    prepared_data = compute_features(data=data)
+
+    prediction = model.predict(prepared_data[features])
+    rmse = root_mean_squared_error(y_true=prepared_data[target], y_pred=prediction)
+    results = prepared_data[f"predicted_{target}"] = prediction
+    return rmse, pd.DataFrame(results)
+
+
 def parse_args():
     default_categorical_features = ["PULocationID", "DOLocationID", "RatecodeID"]
     default_numerical_features = [
@@ -124,7 +160,6 @@ def parse_args():
         "passenger_count",
         "hour_of_day",
         "day_of_week",
-        "duration",
     ]
 
     parser = main_args_parser(default_categorical_features, default_numerical_features)
@@ -133,6 +168,10 @@ def parse_args():
         type=str,
         help="The feature to be used as target",
         default="duration",
+    )
+
+    parser.add_argument(
+        "--scoring_data", type=str, help="The data for scoring the model"
     )
     return parser.parse_args()
 
@@ -163,8 +202,8 @@ def main():
         mlflow.log_param("estimator", "XGBRegressor")
 
         best_parameters = hyperparameter_tuning(
-            df_train=df_train,
-            df_val=df_val,
+            train_data=df_train,
+            validate_data=df_val,
             categorical_features=categorical_features,
             numerical_features=numerical_features,
             target_feature=target,
@@ -175,15 +214,13 @@ def main():
         ## After hyperparameter tuning, train the full dataset
         df_train_full = pd.concat([df_train, df_val])
 
-        rmse, y_pred = train_model(
+        _, y_pred = train_model(
             df_train_full=df_train_full,
             categorical_features=args.categorical_features,
             numerical_features=args.numerical_features,
             target_feature=args.target_feature,
             best_parameters=best_parameters,
         )
-
-        mlflow.log_metric("rmse", float(rmse))
 
         fig_train = plot_pred_distribution(
             y=df_train[target],
@@ -197,7 +234,25 @@ def main():
 
         print(f"Completed train pipeline with mlflow run id {run.info.run_id}")
 
+        df_scoring = pd.read_parquet(args.scoring_data)
+
+        print(f"Scoring the model with {df_scoring.shape[0]} data points")
+
+        rmse, predictions = score_model(
+            run_id=run.info.run_id,
+            data=df_scoring,
+            features=categorical_features + numerical_features,
+            target=target,
+        )
+
+        mlflow.log_metric("rmse", float(rmse))
+        print("Prediction on unseen data", predictions.sample(50))
+        return run.info.run_id
+
 
 if __name__ == "__main__":
 
-    main()
+    runId = main()
+
+    ## RunIf to be retrieved in GitHub Actions
+    print(runId)
