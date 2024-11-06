@@ -22,8 +22,8 @@ jobs:
         run: |
           make test lint
       
-      - name: Build machine learning pipleine
-      - id: build-model
+      - name: Build machine learning pipeline
+        id: build-model
         run: |
           cd orchestration
           chmod +x test_ml_pipeline.sh
