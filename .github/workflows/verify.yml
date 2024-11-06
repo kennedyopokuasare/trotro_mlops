@@ -30,10 +30,8 @@ jobs:
           ./test_ml_pipeline.sh
 
       - name: Archive MLflow experiment runs
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlflow-experiment-tracking
-          path: mlruns/0
+        run : pwd
+        
 
       
 

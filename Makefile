@@ -21,4 +21,4 @@ start_mlflow_server:
 	@echo "#### Starting MLFlow server... ####"
 	mlflow server --backend-store-uri sqlite:///./data/mlflow.db --host 127.0.0.1 --port 8080
 
-all:  clean test lint
+all:  clean install test lint

@@ -245,7 +245,7 @@ def main():
         )
 
         mlflow.log_metric("rmse", float(rmse))
-        print("Prediction on unseen data", predictions.sample(50))
+        print("Prediction on unseen data", predictions[["duration","predited_duration"]].sample(50))
         return run.info.run_id
 
 
