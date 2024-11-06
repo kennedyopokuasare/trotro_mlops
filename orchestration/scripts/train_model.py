@@ -148,8 +148,8 @@ def score_model(run_id, data, features, target):
 
     prediction = model.predict(prepared_data[features])
     rmse = root_mean_squared_error(y_true=prepared_data[target], y_pred=prediction)
-    results = prepared_data[f"predicted_{target}"] = prediction
-    return rmse, pd.DataFrame(results)
+    prepared_data[f"predicted_{target}"] = prediction
+    return rmse, prepared_data
 
 
 def parse_args():
@@ -253,5 +253,4 @@ if __name__ == "__main__":
 
     runId = main()
 
-    ## RunIf to be retrieved in GitHub Actions
-    print(runId)
+    print(f"Mlflow run Id for the final model: {runId}")

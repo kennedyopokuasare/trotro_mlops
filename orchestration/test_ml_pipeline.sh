@@ -14,4 +14,3 @@ python scripts/train_model.py\
     --train_data_path ../data \
     --validation_data_path ../data \
     --scoring_data ../data/yellow_tripdata_2024-03.parquet
-
