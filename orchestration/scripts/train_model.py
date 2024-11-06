@@ -176,6 +176,10 @@ def parse_args():
 
 
 def main():
+    """
+    Main function to execute the training pipeline, including hyperparameter tuning,
+    model training, and scoring on unseen data.
+    """
     with mlflow.start_run() as run:
         args = parse_args()
         print(" ".join(f"{k}={v}\n" for k, v in vars(args).items()))
