@@ -14,11 +14,13 @@ test:
 
 clean:
 	@echo "#### Cleaning up... ####"
-	rm -rf build dist trotro.egg-info __pycache__ 
+	rm -rf build dist trotro.egg-info __pycache__
 
 
 start_mlflow_server:
 	@echo "#### Starting MLFlow server... ####"
 	mlflow server --backend-store-uri sqlite:///./data/mlflow.db --host 127.0.0.1 --port 8080
+
+pre-commit: clean test lint
 
 all:  clean install test lint
