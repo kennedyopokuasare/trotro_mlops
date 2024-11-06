@@ -23,10 +23,15 @@ jobs:
           make test lint
       
       - name: Build machine learning pipleine
+      - id: build-model
         run: |
           cd orchestration
           chmod +x test_ml_pipeline.sh
           runId = $(./test_ml_pipeline.sh)
-          echo $runId 
+          echo "MLFLOW_RUN_ID=$runId" >> $GITHUB_OUTPUT
+
+      - name: Save model as artefact
+        run: |
+          echo "mlflow run Id from previous step ${{steps.build-model.outputs.MLFLOW_RUN_ID}}"
       
 
