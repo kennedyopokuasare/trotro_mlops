@@ -10,7 +10,7 @@ from sklearn.metrics import root_mean_squared_error
 from sklearn.pipeline import make_pipeline
 from xgboost import XGBRegressor
 
-from orchestration.scripts.prepare_data import compute_features
+from orchestration.scripts.prepare_data import compute_training_features_with_target
 from orchestration.scripts.utils import main_args_parser, plot_pred_distribution
 
 
@@ -144,7 +144,7 @@ def score_model(run_id, data, features, target):
 
     model = mlflow.pyfunc.load_model(model_uri)
 
-    prepared_data = compute_features(data=data)
+    prepared_data = compute_training_features_with_target(data=data)
 
     prediction = model.predict(prepared_data[features])
     rmse = root_mean_squared_error(y_true=prepared_data[target], y_pred=prediction)
@@ -153,6 +153,12 @@ def score_model(run_id, data, features, target):
 
 
 def parse_args():
+    """
+    Parse command line arguments for the training pipeline.
+
+    Returns:
+    - argparse.Namespace: Parsed command line arguments.
+    """
     default_categorical_features = ["PULocationID", "DOLocationID", "RatecodeID"]
     default_numerical_features = [
         "trip_distance",

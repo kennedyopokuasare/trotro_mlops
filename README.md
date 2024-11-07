@@ -29,8 +29,8 @@ Experimentation variables, features, metrics, parameters, and models are tracked
 Future work:
 
 - Feature importance analysis and interpretability with tools such as  SHAP and [IntepretML](https://interpret.ml/)
-- Model fairness evaluation with FairLearn: https://fairlearn.org/
+- Model fairness evaluation with [FairLearn](https://fairlearn.org/)
 - Model explanation and interpretability with counterfactuals, using [DICE](https://interpret.ml/DiCE/)
 
 # Orchestration
-Machine Learning pipeline orchestration was build around Microsof Azure Machine Learning. This implementation is similar the project found [here](https://github.com/kennedyopokuasare/Azure_datascience). For easier reproducability, this project uses [GitHub Actions as a build system to orchestrate the model hyperparameter tuning, training, and scoring]((https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml)).
+Machine Learning pipeline orchestration was build around Microsof Azure Machine Learning. This implementation is similar the project found [here](https://github.com/kennedyopokuasare/Azure_datascience). For easier reproducability, this project uses [GitHub Actions as a build system to orchestrate the model hyperparameter tuning, training, and scoring](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml).

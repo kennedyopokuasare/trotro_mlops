@@ -29,15 +29,28 @@ def clean_data(
     return df_train, df_val
 
 
-def compute_features(data: pd.DataFrame) -> pd.DataFrame:
-    """Computes the features for the given data."""
+def compute_training_features_with_target(data: pd.DataFrame) -> pd.DataFrame:
+    """Computes model training features and target."""
+    data = compute_features(data=data)
+
+    data["tpep_pickup_datetime"] = pd.to_datetime(data.tpep_pickup_datetime)
+    data["tpep_dropoff_datetime"] = pd.to_datetime(data.tpep_dropoff_datetime)
 
     data["duration"] = data.tpep_dropoff_datetime - data.tpep_pickup_datetime
-    data["hour_of_day"] = data.tpep_pickup_datetime.dt.hour
-    data["day_of_week"] = data.tpep_pickup_datetime.dt.dayofweek
-
     data["duration"] = data.duration.dt.total_seconds() / 60
     return pd.DataFrame(data[(data.duration >= 1) & (data.duration <= 60)])
+
+
+def compute_features(data: pd.DataFrame) -> pd.DataFrame:
+    """Computes features from the given DataFrame."""
+
+    data["tpep_pickup_datetime"] = pd.to_datetime(data.tpep_pickup_datetime)
+    data["hour_of_day"] = data.tpep_pickup_datetime.dt.hour
+    data["hour_of_day"] = data["hour_of_day"].astype(float)
+    data["day_of_week"] = data.tpep_pickup_datetime.dt.dayofweek
+    data["day_of_week"] = data["day_of_week"].astype(float)
+
+    return data
 
 
 def select_features(
@@ -59,9 +72,9 @@ def feature_engineering(
     """Performs feature engineering on the cleaned training and validation data."""
     print("feature engineering...")
 
-    df_train = compute_features(df_train)
+    df_train = compute_training_features_with_target(df_train)
     df_train = select_features(df_train, categorical_features, numerical_features)
-    df_val = compute_features(df_val)
+    df_val = compute_training_features_with_target(df_val)
     df_val = select_features(df_val, categorical_features, numerical_features)
 
     return df_train, df_val
