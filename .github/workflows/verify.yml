@@ -3,7 +3,7 @@ name: Install, build and test code
 on: [push]
 
 jobs:
-  verify:
+  orchestrate-ml-pipeline:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,19 +21,17 @@ jobs:
       - name: Code formatting and linting
         run: |
           make test lint
-      
-      - name: Build machine learning pipeline
+
+      - name: Orchestrate machine learning pipeline
         id: build-model
         run: |
           cd orchestration
           chmod +x test_ml_pipeline.sh
           ./test_ml_pipeline.sh
-        
+
       - name: Archive MLflow experiment runs
         uses: actions/upload-artifact@v4
         with:
           name: mlflow-experiment-tracking
           path: orchestration/mlruns/0
           retention-days: 5
-      
-

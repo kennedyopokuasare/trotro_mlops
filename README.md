@@ -1,25 +1,36 @@
+# Trotro MLops: Predicting the duration of a taxi ride
 [![Install, build and test code](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml/badge.svg)](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml)
 
-# Trotro MLops
+## Introduction
+
+In the realm of urban mobility, accurately predicting taxi ride durations is crucial for optimizing logistics and enhancing user experience.
+
+**Trotro MLops** project designed to leverage Machine Learning techniques for predicting taxi ride durations. By adhering to MLOps principles, this project seeks to facilitate efficient model development, deployment, and monitoring, ensuring that our predictions are both reliable and scalable.
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Machine Learning Modeling and Experiment Tracking](#machine-learning-modeling-and-experiment-tracking)
+- [Future Work](#future-work)
 
 
-An MLOPS for predicting when a taxi will arrive at a trip destination.
 
+## Machine Learning Modeling and Experiment Tracking
 
-## The dataset 
+The dataset for training, testing, and validation was downloaded from New York City Taxi and Limousine Commission. The [January 2024 data](https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet) was used for training, while the [February 2024 data](https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-02.parquet) was utilized for validation.
 
-Downloaded from New York City tax and limousine Commision. We use the [January 2024 data](https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet) for training and [February 2024 data](https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-02.parquet) for validating the model. 
+Hyperparameter tuning with Bayesian optimization was performed, leveraging the `hyperopt` Python library. The final model was trained with the best hyperparameters and full training data, which included both the training and validation datasets. The [March 2024 data](https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-03.parquet) was used for scoring the model.
 
+Experimentation variables, features, metrics, parameters, and models are tracked with **MLFlow**. Some of the artifacts that were saved with MLFlow are the plots of predictions from an XGBoost regressor on the training and validation sets.
 
+| Training Dataset Prediction | Validation Dataset Prediction |
+|-----------------------------|-------------------------------|
+| ![Training set prediction](./modeling/img/train_dist.png)  | ![Validation set prediction](./modeling/img/val_dist.png) |
 
-# Modeling
+Future work:
 
-Comparing the prediction of an xgboot regressor on a training and validation set
+- Feature importance analysis and interpretability with tools such as  SHAP and [IntepretML](https://interpret.ml/)
+- Model fairness evaluation with FairLearn: https://fairlearn.org/
+- Model explanation and interpretability with counterfactuals, using [DICE](https://interpret.ml/DiCE/)
 
-| Training dataset prediction | Validation dataset prediction |
-|----------|----------|
-| ![Training set prediction](./modeling/img/train_dist.png)  | ![Training set prediction](./modeling/img/val_dist.png) |
-
-# Experiment tracking with MlFlow
-
-
+# Orchestration
+Machine Learning pipeline orchestration was build around Microsof Azure Machine Learning. This implementation is similar the project found [here](https://github.com/kennedyopokuasare/Azure_datascience). For easier reproducability, this project uses [GitHub Actions as a build system to orchestrate the model hyperparameter tuning, training, and scoring]((https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml)).
