@@ -1,3 +1,0 @@
-[submodule "archestration/mlops"]
-	path = archestration/mlops
-	url = https://github.com/mage-ai/mlops.git

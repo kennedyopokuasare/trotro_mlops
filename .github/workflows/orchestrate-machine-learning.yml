@@ -1,4 +1,4 @@
-name: Install, build and test code
+name: Orchestrate Machine Learning Pipeline
 
 on: [push]
 

@@ -12,6 +12,6 @@ trotro = {
 
 url = "http://localhost:9696/predict"
 
-response = requests.post(url=url, json=trotro)
+response = requests.post(url=url, json=trotro, timeout=5)
 
 print(response.json())
