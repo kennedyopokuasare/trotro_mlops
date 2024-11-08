@@ -1,6 +1,6 @@
 # Trotro MLops: Predicting the duration of a taxi ride
 
-[![Install, build and test code](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml/badge.svg)](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml)
+[![Orchestrate Machine Learning Pipeline](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/orchestrate-machine-learning.yml/badge.svg)](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/orchestrate-machine-learning.yml)
 
 ## Introduction
 
@@ -13,7 +13,6 @@ In the realm of urban mobility, accurately predicting taxi ride durations is cru
 - [Introduction](#introduction)
 - [Machine Learning Modeling and Experiment Tracking](#machine-learning-modeling-and-experiment-tracking)
 - [Orchestration](#orchestration)
-
 
 
 ## Machine Learning Modeling and Experiment Tracking
