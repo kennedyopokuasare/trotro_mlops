@@ -4,13 +4,13 @@ install:
 
 lint:
 	@echo "#### Formatting and Linting... ####"
-	isort orchestration
+	isort .
 	black .
-	pylint  --disable=R,C orchestration
+	pylint  --disable=R,C .
 
 test:
 	@echo "#### Testing... ####"
-	pytest orchestration
+	pytest .
 
 clean:
 	@echo "#### Cleaning up... ####"

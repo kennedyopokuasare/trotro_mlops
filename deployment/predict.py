@@ -1,15 +1,8 @@
 import os
-from flask import Flask, request, jsonify
+
 import mlflow
-import sys
-from pathlib import Path
-
-# Add the parent directory to the system path
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-
-from orchestration.scripts.prepare_data import compute_features
-
 import pandas as pd
+from flask import Flask, jsonify, request
 
 
 class TrotroDurationPrediction(object):
@@ -17,9 +10,20 @@ class TrotroDurationPrediction(object):
     def __init__(self, model_uri) -> None:
         self.model = mlflow.pyfunc.load_model(model_uri)
 
+    def compute_features(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Computes features from the given DataFrame."""
+
+        data["tpep_pickup_datetime"] = pd.to_datetime(data.tpep_pickup_datetime)
+        data["hour_of_day"] = data.tpep_pickup_datetime.dt.hour
+        data["hour_of_day"] = data["hour_of_day"].astype(float)
+        data["day_of_week"] = data.tpep_pickup_datetime.dt.dayofweek
+        data["day_of_week"] = data["day_of_week"].astype(float)
+
+        return data
+
     def predict(self, trotro_data: dict):
         input_data = pd.DataFrame([trotro_data])
-        features = compute_features(input_data)
+        features = self.compute_features(input_data)
         features.drop(columns=["tpep_pickup_datetime"], inplace=True)
         preds = self.model.predict(features)
         return float(preds[0])

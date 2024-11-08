@@ -10,8 +10,8 @@ trotro = {
 }
 
 
-url = "http://localhost:9696/predict"
+URL = "http://localhost:9696/predict"
 
-response = requests.post(url=url, json=trotro, timeout=5)
+response = requests.post(url=URL, json=trotro, timeout=5)
 
 print(response.json())
