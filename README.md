@@ -1,4 +1,5 @@
 # Trotro MLops: Predicting the duration of a taxi ride
+
 [![Install, build and test code](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml/badge.svg)](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml)
 
 ## Introduction
@@ -8,9 +9,10 @@ In the realm of urban mobility, accurately predicting taxi ride durations is cru
 **Trotro MLops** project designed to leverage Machine Learning techniques for predicting taxi ride durations. By adhering to MLOps principles, this project seeks to facilitate efficient model development, deployment, and monitoring, ensuring that our predictions are both reliable and scalable.
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Machine Learning Modeling and Experiment Tracking](#machine-learning-modeling-and-experiment-tracking)
-- [Future Work](#future-work)
+- [Orchestration](#orchestration)
 
 
 
@@ -32,5 +34,6 @@ Future work:
 - Model fairness evaluation with [FairLearn](https://fairlearn.org/)
 - Model explanation and interpretability with counterfactuals, using [DICE](https://interpret.ml/DiCE/)
 
-# Orchestration
+## Orchestration
+
 Machine Learning pipeline orchestration was build around Microsof Azure Machine Learning. This implementation is similar the project found [here](https://github.com/kennedyopokuasare/Azure_datascience). For easier reproducability, this project uses [GitHub Actions as a build system to orchestrate the model hyperparameter tuning, training, and scoring](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml).
