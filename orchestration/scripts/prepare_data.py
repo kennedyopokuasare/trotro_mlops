@@ -31,7 +31,11 @@ def clean_data(
 
 def compute_training_features_with_target(data: pd.DataFrame) -> pd.DataFrame:
     """Computes model training features and target."""
-    data = compute_features(data=data)
+    data["tpep_pickup_datetime"] = pd.to_datetime(data.tpep_pickup_datetime)
+    data["hour_of_day"] = data.tpep_pickup_datetime.dt.hour
+    data["hour_of_day"] = data["hour_of_day"].astype(float)
+    data["day_of_week"] = data.tpep_pickup_datetime.dt.dayofweek
+    data["day_of_week"] = data["day_of_week"].astype(float)
 
     data["tpep_pickup_datetime"] = pd.to_datetime(data.tpep_pickup_datetime)
     data["tpep_dropoff_datetime"] = pd.to_datetime(data.tpep_dropoff_datetime)
@@ -39,18 +43,6 @@ def compute_training_features_with_target(data: pd.DataFrame) -> pd.DataFrame:
     data["duration"] = data.tpep_dropoff_datetime - data.tpep_pickup_datetime
     data["duration"] = data.duration.dt.total_seconds() / 60
     return pd.DataFrame(data[(data.duration >= 1) & (data.duration <= 60)])
-
-
-def compute_features(data: pd.DataFrame) -> pd.DataFrame:
-    """Computes features from the given DataFrame."""
-
-    data["tpep_pickup_datetime"] = pd.to_datetime(data.tpep_pickup_datetime)
-    data["hour_of_day"] = data.tpep_pickup_datetime.dt.hour
-    data["hour_of_day"] = data["hour_of_day"].astype(float)
-    data["day_of_week"] = data.tpep_pickup_datetime.dt.dayofweek
-    data["day_of_week"] = data["day_of_week"].astype(float)
-
-    return data
 
 
 def select_features(
