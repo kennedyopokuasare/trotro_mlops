@@ -2,6 +2,11 @@ name: Orchestrate Machine Learning Pipeline
 
 on: [push]
 
+# Cancel previous workflow runs on new commit to the branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   orchestrate-ml-pipeline:
     runs-on: ubuntu-latest
