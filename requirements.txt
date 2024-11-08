@@ -2,7 +2,7 @@ black
 pytest
 pytest-cov
 pandas
-numpy
+numpy==1.26.4
 scikit-learn
 scipy
 matplotlib==3.9.2
@@ -10,10 +10,11 @@ seaborn
 ipython
 pyarrow
 xgboost==2.1.1
-mlflow
+mlflow==2.17.1
 hyperopt
 pickle5==0.0.11
 azure-ai-ml==1.21.1
 pylint==3.3.1
 pytest
 isort==5.13.2
+gunicorn

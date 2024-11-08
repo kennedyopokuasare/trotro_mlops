@@ -5,7 +5,6 @@ import pandas as pd
 import xgboost as xgb
 from hyperopt import STATUS_OK, Trials, fmin, hp, space_eval, tpe
 from hyperopt.pyll.base import scope
-from mlflow.models import infer_signature
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import root_mean_squared_error
 from sklearn.pipeline import make_pipeline
@@ -99,7 +98,6 @@ def train_model(
     numerical_features,
     target_feature,
     best_parameters,
-    log_model_callback=None,
 ):
     """
     Train an XGBoost model using the provided training data and optimized hyperparameters.
@@ -126,9 +124,6 @@ def train_model(
     y_pred = pipeline.predict(x_train)
     rmse = root_mean_squared_error(y_train, y_pred)
     print(f"RMSE on full training data: {rmse:.2f}")
-
-    if log_model_callback:
-        log_model_callback(x_train, pipeline)
 
     return rmse, y_pred
 
@@ -195,7 +190,7 @@ def main():
         args = parse_args()
         print(" ".join(f"{k}={v}\n" for k, v in vars(args).items()))
 
-        mlflow.xgboost.autolog(log_models=False)
+        mlflow.xgboost.autolog()
         mlflow.log_params(vars(args))
 
         train_data_file = os.path.join(args.train_data_path, "train_data.csv")
@@ -228,17 +223,12 @@ def main():
         ## After hyperparameter tuning, train the full dataset
         df_train_full = pd.concat([df_train, df_val])
 
-        def log_model_callback(model_input, model):
-            signature = infer_signature(model_input, model.predict(model_input))
-            mlflow.xgboost.log_model(model, artifact_path="model", signature=signature)
-
         _, y_pred = train_model(
             df_train_full=df_train_full,
             categorical_features=args.categorical_features,
             numerical_features=args.numerical_features,
             target_feature=args.target_feature,
             best_parameters=best_parameters,
-            log_model_callback=log_model_callback,
         )
 
         fig_train = plot_pred_distribution(
