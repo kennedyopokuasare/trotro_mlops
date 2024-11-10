@@ -23,7 +23,7 @@ jobs:
         run: |
           make install
 
-      - name: Code formatting and linting
+      - name: Code formatting, linting and unit testing
         run: |
           make test lint
 
