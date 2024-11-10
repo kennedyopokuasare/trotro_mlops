@@ -26,7 +26,7 @@ build_deployment_container:
 
 run_deployment_container: build_deployment_container
 	@echo "#### Running deployment container image ####"
-	docker run -it --rm -p 9696:9696 trotro-duration-prediction-service:v1
+	docker run -i --rm -p 9696:9696 trotro-duration-prediction-service:v1
 
 
 pre-commit: clean test lint
