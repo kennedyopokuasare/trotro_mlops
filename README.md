@@ -36,3 +36,8 @@ Future work:
 ## Orchestration
 
 Machine Learning pipeline orchestration was build around Microsof Azure Machine Learning. This implementation is similar the project found [here](https://github.com/kennedyopokuasare/Azure_datascience). For easier reproducability, this project uses [GitHub Actions as a build system to orchestrate the model hyperparameter tuning, training, and scoring](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/verify.yml).
+
+
+## Deployment
+
+MLOps engineers need to test the model against specific quality metrics before deploying it to staging or production. In this project, the model is served through a Flask web service and containerized with Docker. GitHub Actions is used to set up an integration test that calls the web service endpoint in the Docker container.
