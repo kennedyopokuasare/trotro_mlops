@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 trotro = {
@@ -13,5 +15,9 @@ trotro = {
 URL = "http://localhost:9696/predict"
 
 response = requests.post(url=URL, json=trotro, timeout=5)
+prediction = response.json()
+print(json.dumps(prediction, indent=2))
 
-print(response.json())
+assert "duration" in prediction
+
+assert prediction["duration"] is not None
