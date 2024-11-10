@@ -12,7 +12,7 @@ RUN mkdir -p model/
 
 COPY model/ model/
 
-COPY predict.py requirements.txt ./
+COPY predict.py prediction_service.py requirements.txt ./
 
 # install other requirements
 RUN pip install -r requirements.txt

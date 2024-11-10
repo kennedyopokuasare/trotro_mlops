@@ -16,8 +16,12 @@ URL = "http://localhost:9696/predict"
 
 response = requests.post(url=URL, json=trotro, timeout=5)
 prediction = response.json()
+
+print("Prediction:")
 print(json.dumps(prediction, indent=2))
 
+print("Asserting that prediction contains duration")
 assert "duration" in prediction
 
+print("Asserting that predicted duration is not None")
 assert prediction["duration"] is not None

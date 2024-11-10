@@ -10,7 +10,7 @@ lint:
 
 test:
 	@echo "#### Testing... ####"
-	pytest orchestration
+	pytest orchestration deployment
 
 clean:
 	@echo "#### Cleaning up... ####"

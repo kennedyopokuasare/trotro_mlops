@@ -57,11 +57,11 @@ jobs:
           run: |
             make install
 
-        - name: Deploy model as web service with docker
+        - name: Deploy model as web service with Docker
           run: |
             make run_deployment_container
 
-        - name: test model
+        - name: Test model prediction endpoint
           run : |
             cd deployment
             python  call_predict.py
