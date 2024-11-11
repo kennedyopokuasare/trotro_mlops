@@ -13,7 +13,7 @@ In the realm of urban mobility, accurately predicting taxi ride durations is cru
 - [Introduction](#introduction)
 - [Machine Learning Modeling and Experiment Tracking](#machine-learning-modeling-and-experiment-tracking)
 - [Orchestration](#orchestration)
-
+- [Deployment](#deployment)
 
 ## Machine Learning Modeling and Experiment Tracking
 
@@ -33,13 +33,19 @@ Future work:
 - Model fairness evaluation with [FairLearn](https://fairlearn.org/)
 - Model explanation and interpretability with counterfactuals, using [DICE](https://interpret.ml/DiCE/)
 
+[See source code here](./modeling/)
+
 ## Orchestration
 
 Machine Learning pipeline orchestration was built to run with `Microsoft Azure Machine Learning`. This implementation is similar the project found [here](https://github.com/kennedyopokuasare/Azure_datascience). For easier reproducability, this project uses [`GitHub Actions` as a build system to orchestrate the model hyperparameter tuning, training, and scoring](https://github.com/kennedyopokuasare/trotro_mlops/actions/workflows/orchestrate-machine-learning.yml).
 
+Unit tests have been implemented using `pytest` to validate the core functionality of the orchestration.
+
+[See source code here](./orchestration/)
+
 ## Deployment
 
-MLOps engineers need to test the model against specific quality metrics before deploying it to staging or production. In this project, the model is served through a `Flask` web service and containerized with `Docker`.
+MLOps engineers must evaluate the model against specific quality metrics before deploying it to staging or production. In this project, the model is served via a `Flask` web service and containerized using `Docker`.
 
 ### Integration test
 

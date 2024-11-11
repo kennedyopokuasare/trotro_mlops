@@ -30,5 +30,6 @@ run_deployment_container: build_deployment_container
 
 
 pre-commit: clean test lint
+	git add .
 
 all:  clean install test lint
