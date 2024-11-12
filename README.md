@@ -54,3 +54,7 @@ MLOps engineers must evaluate the model against specific quality metrics before 
 - First builds the model
 - Containerize the model
 - Calls the web service endpoint in the Docker container
+
+![Deployment GitHub Actions workflow](./deployment/img/gh-actions-workflow.png)
+
+[See source code here](./deployment/)
